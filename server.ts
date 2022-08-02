@@ -2,6 +2,8 @@ import { Response } from 'express'
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+
 const cors = require('cors')
 const path = require('path')
 const app = express()
@@ -33,6 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(log)
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)

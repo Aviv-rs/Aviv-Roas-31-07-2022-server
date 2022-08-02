@@ -93,6 +93,7 @@ async function add(user: User) {
       password: user.password,
       fullname: user.fullname,
       avatar: user.avatar,
+      role: 'visitor',
     }
     const collection = await dbService.getCollection('user')
     await collection.insertOne(userToAdd)

@@ -4,6 +4,7 @@ export interface User {
   username: string
   password: string
   avatar?: string
+  role: string
 }
 
 export interface UserFilterBy {
