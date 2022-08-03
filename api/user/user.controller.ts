@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { User, UserCredAdd } from './models'
 
 const userService = require('./user.service')
+const authService = require('../auth/auth.service')
 const logger = require('../../services/logger.service')
 
 async function getUser(req: Request, res: Response) {
@@ -50,8 +51,13 @@ async function updateUser(req: Request, res: Response) {
 }
 async function addUser(req: Request<UserCredAdd>, res: Response) {
   try {
-    const user: UserCredAdd = req.body
-    const savedUser: User = await userService.add(user)
+    const { avatar, fullname, password, username }: UserCredAdd = req.body
+    const savedUser: User = await authService.signup(
+      username,
+      password,
+      fullname,
+      avatar
+    )
 
     res.send(savedUser)
   } catch (err) {

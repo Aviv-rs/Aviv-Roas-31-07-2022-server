@@ -53,7 +53,6 @@ async function add(friendRequest: FriendRequest) {
     const collection: Collection<User[]> = await dbService.getCollection('user')
     const sender: User = await userService.getById(friendRequest.fromUser._id)
 
-    console.log()
     if (
       sender.friendRequests.findIndex(
         req => req.toUser._id === friendRequest.toUser._id
