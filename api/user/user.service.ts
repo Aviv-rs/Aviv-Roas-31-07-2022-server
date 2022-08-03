@@ -1,4 +1,4 @@
-import { User, UserFilterBy } from './models'
+import { User, UserCredAdd, UserFilterBy } from './models'
 
 const dbService = require('../../services/mongodb.service')
 const logger = require('../../services/logger.service')
@@ -71,7 +71,7 @@ async function update(user: User) {
   try {
     // peek only updatable properties
     const userToSave = {
-      _id: ObjectId(user._id), // needed for the returnd obj
+      _id: ObjectId(user._id), // needed for the returned obj
       username: user.username,
       fullname: user.fullname,
       avatar: user.avatar,
@@ -85,7 +85,7 @@ async function update(user: User) {
   }
 }
 
-async function add(user: User) {
+async function add(user: UserCredAdd) {
   try {
     // pick only updatable fields!
     const userToAdd = {
@@ -94,6 +94,7 @@ async function add(user: User) {
       fullname: user.fullname,
       avatar: user.avatar,
       role: 'visitor',
+      friends: [] as User[],
     }
     const collection = await dbService.getCollection('user')
     await collection.insertOne(userToAdd)

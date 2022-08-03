@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { User, UserCredAdd } from './models'
 
 const userService = require('./user.service')
 const logger = require('../../services/logger.service')
@@ -36,16 +37,26 @@ async function deleteUser(req: Request, res: Response) {
   }
 }
 
-async function saveUser(req: Request, res: Response) {
+async function updateUser(req: Request, res: Response) {
   try {
     const user = req.body
-    const savedUser = user._id
-      ? await userService.update(user)
-      : await userService.add(user)
+    const savedUser = await userService.update(user)
+
     res.send(savedUser)
   } catch (err) {
     logger.error('Failed to update user', err)
     res.status(500).send({ err: 'Failed to update user' })
+  }
+}
+async function addUser(req: Request<UserCredAdd>, res: Response) {
+  try {
+    const user: UserCredAdd = req.body
+    const savedUser: User = await userService.add(user)
+
+    res.send(savedUser)
+  } catch (err) {
+    logger.error('Failed to add user', err)
+    res.status(500).send({ err: 'Failed to add user' })
   }
 }
 
@@ -53,5 +64,6 @@ module.exports = {
   getUser,
   getUsers,
   deleteUser,
-  saveUser,
+  updateUser,
+  addUser,
 }

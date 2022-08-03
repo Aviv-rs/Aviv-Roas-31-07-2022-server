@@ -13,7 +13,6 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  console.log(req.cookies)
   if (!req?.cookies?.loginToken)
     return res.status(401).send('Not Authenticated')
   const loggedinUser: User = authService.validateToken(req.cookies.loginToken)
