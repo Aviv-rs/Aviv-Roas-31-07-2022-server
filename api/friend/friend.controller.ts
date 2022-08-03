@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { FriendRequest } from './models'
 
 const friendService = require('./friend.service')
 const logger = require('../../services/logger.service')
@@ -40,6 +41,21 @@ async function sendFriendRequest(req: Request, res: Response) {
   }
 }
 
+// PUT (Update entity)
+async function acceptFriendRequest(req: Request<FriendRequest>, res: Response) {
+  try {
+    const friendRequest: FriendRequest = req.body
+    if (friendRequest.status === 'confirmed')
+      res.status(400).send('Request already confirmed!')
+    const acceptedFriendRequest = await friendService.update(friendRequest)
+
+    res.json(acceptedFriendRequest)
+  } catch (err) {
+    logger.error('Failed to accept friend request', err)
+    res.status(500).send({ err: 'Failed to accept friend request' })
+  }
+}
+
 // DELETE (Remove entity)
 async function removeEntity(req: Request, res: Response) {
   try {
@@ -56,5 +72,6 @@ module.exports = {
   getEntities,
   getEntityById,
   sendFriendRequest,
+  acceptFriendRequest,
   removeEntity,
 }

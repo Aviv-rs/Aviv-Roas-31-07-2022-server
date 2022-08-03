@@ -75,6 +75,60 @@ async function add(friendRequest: FriendRequest) {
   }
 }
 
+// Accept friend request
+async function update(friendRequest: FriendRequest) {
+  try {
+    // peek only updatable properties
+
+    const collection: Collection = await dbService.getCollection('user')
+    const sender: User = await userService.getById(friendRequest.fromUser._id)
+    const reciever: User = await userService.getById(friendRequest.toUser._id)
+
+    sender.friendRequests.forEach(async friendReq => {
+      if (
+        friendReq.fromUser._id === friendRequest.fromUser._id &&
+        friendReq.toUser._id === friendRequest.toUser._id
+      )
+        friendReq.status = 'confirmed'
+
+      console.log(
+        'Curr request reciever id',
+        friendReq.fromUser._id,
+        'Recieved request reciever id',
+        friendRequest.fromUser._id
+      )
+    })
+    reciever.friendRequests.forEach(friendReq => {
+      if (
+        friendReq.fromUser._id === friendRequest.fromUser._id &&
+        friendReq.toUser._id === friendRequest.toUser._id
+      )
+        friendReq.status = 'confirmed'
+    })
+
+    await collection.updateOne(
+      { _id: ObjectId(friendRequest.fromUser._id) },
+
+      {
+        $set: { friendRequests: [...sender.friendRequests] },
+        $push: { friends: { ...friendRequest.toUser } },
+      }
+    )
+
+    await collection.updateOne(
+      { _id: ObjectId(friendRequest.toUser._id) },
+
+      {
+        $set: { friendRequests: [...reciever.friendRequests] },
+        $push: { friends: { ...friendRequest.fromUser } },
+      }
+    )
+  } catch (err) {
+    logger.error('Cannot update friend request', err)
+    throw err
+  }
+}
+
 function _buildCriteria(filterBy: string) {
   //   const { name, createdAt, tags, createdBy } = filterBy
   const filterCriteria = {}
@@ -93,6 +147,7 @@ module.exports = {
   query,
   getById,
   add,
+  update,
 }
 
 export {}
