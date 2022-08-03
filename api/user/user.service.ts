@@ -1,3 +1,4 @@
+import { Friend, FriendRequest } from 'api/friend/models'
 import { User, UserCredAdd, UserFilterBy } from './models'
 
 const dbService = require('../../services/mongodb.service')
@@ -94,7 +95,8 @@ async function add(user: UserCredAdd) {
       fullname: user.fullname,
       avatar: user.avatar,
       role: 'visitor',
-      friends: [] as User[],
+      friends: [] as Friend[],
+      friendRequests: [] as FriendRequest[],
     }
     const collection = await dbService.getCollection('user')
     await collection.insertOne(userToAdd)

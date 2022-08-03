@@ -12,7 +12,7 @@ const { log } = require('./middlewares/logger.middleware')
 const PORT = 3030
 
 // replace entities with whatever data model you'd like
-const entityRouts = require('./api/entity/entity.routes')
+const friendRouts = require('./api/friend/friend.routes')
 const userRoutes = require('./api/user/user.routes')
 const authRoutes = require('./api/auth/auth.routes')
 const { setupSocketAPI } = require('./services/socket.service')
@@ -39,7 +39,7 @@ app.use(cookieParser())
 app.use(log)
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
-app.use('/api/entity', entityRouts)
+app.use('/api/friend', friendRouts)
 
 app.get('/**', (req: Request, res: Response) => {
   res.status(404).sendFile(path.resolve(__dirname, 'public/404.html'))

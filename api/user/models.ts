@@ -1,3 +1,5 @@
+import { Friend, FriendRequest } from 'api/friend/models'
+
 export interface User {
   _id: string
   fullname: string
@@ -5,7 +7,8 @@ export interface User {
   password: string
   avatar: string
   role: string
-  friends: User[]
+  friends: Friend[]
+  friendRequests: FriendRequest[]
 }
 export interface UserCredAdd {
   fullname: string
