@@ -9,7 +9,7 @@ const path = require('path')
 const app = express()
 const http = require('http').createServer(app)
 const { log } = require('./middlewares/logger.middleware')
-const PORT = 3030
+const PORT = process.env.PORT || 3030
 
 // replace entities with whatever data model you'd like
 const friendRouts = require('./api/friend/friend.routes')
