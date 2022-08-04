@@ -19,7 +19,7 @@ const { setupSocketAPI } = require('./services/socket.service')
 setupSocketAPI(http)
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.resolve(__dirname, 'public')))
+  app.use(express.static(path.resolve(__dirname, 'build')))
 } else {
   const corsOptions = {
     origin: [
