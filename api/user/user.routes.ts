@@ -1,4 +1,4 @@
-const express = require('express')
+const _express = require('express')
 const {
   getUser,
   getUsers,
@@ -6,7 +6,7 @@ const {
   deleteUser,
   addUser,
 } = require('./user.controller')
-const router = express.Router()
+const router = _express.Router()
 const {
   requireAdmin,
   requireAuth,

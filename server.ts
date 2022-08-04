@@ -1,4 +1,4 @@
-import { Response } from 'express'
+// import { Response } from 'express'
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 
 const cors = require('cors')
 const path = require('path')
-const app = express()
+const app = _express()
 const http = require('http').createServer(app)
 const { log } = require('./middlewares/logger.middleware')
 const PORT = 3030
@@ -19,7 +19,7 @@ const { setupSocketAPI } = require('./services/socket.service')
 setupSocketAPI(http)
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.resolve(__dirname, 'build')))
+  app.use(_express.static(path.resolve(__dirname, 'build')))
 } else {
   const corsOptions = {
     origin: [
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(cors(corsOptions))
 }
 
-app.use(express.static('public'))
+app.use(_express.static('public'))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(log)
@@ -41,7 +41,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/friend', friendRouts)
 
-app.get('/**', (req: Request, res: Response) => {
+app.get('/**', (req: Request, res: any) => {
   res.status(404).sendFile(path.resolve(__dirname, 'public/404.html'))
 })
 
