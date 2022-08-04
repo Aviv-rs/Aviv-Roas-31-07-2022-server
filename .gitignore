@@ -1,7 +1,6 @@
 logs
 logs/backend.log
 node_modules
-db_config
 .env
 .vscode
 api/entity
