@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
     "esModuleInterop": false,
     "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "baseUrl": "."
+  },
+
+  "ts-node": {
+    "esm": true
   }
 }
