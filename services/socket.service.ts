@@ -1,14 +1,20 @@
-import { Server, Socket } from 'socket.io'
+import { FriendRequest } from 'api/friend/models'
+import { Server } from 'socket.io'
 
 interface ServerToClientEvents {
-  noArg: () => void
-  withAck: (d: string, callback: (e: number) => void) => void
-  basicEmit: (type: string, data: any) => void
+  // noArg: () => void
+  // withAck: (d: string, callback: (e: number) => void) => void
+  // basicEmit: (type: string, data: any) => void
+  // 'user-recieved-new-request': (userId: string) => void
+  // 'user-confirmed-my-request': (userId: string) => void
+  [eventName: string]: (data: any) => void
 }
 
 interface ClientToServerEvents {
   'set-user-socket': (userId: string) => void
   'unset-user-socket': () => void
+  'friend-request-sent': (friendRequest: FriendRequest) => void
+  'friend-request-confirmed': (friendRequest: FriendRequest) => void
 }
 
 interface InterServerEvents {
@@ -37,6 +43,19 @@ function setupSocketAPI(http: Server) {
   gIo.on('connection', socket => {
     logger.info(`New connected socket [id: ${socket.id}]`)
 
+    socket.on('friend-request-sent', (friendRequest: FriendRequest) => {
+      const userId = friendRequest.toUser._id
+      emitToUser({ type: 'user-recieved-new-request', data: '', userId })
+    })
+    socket.on('friend-request-confirmed', (friendRequest: FriendRequest) => {
+      const userId = friendRequest.fromUser._id
+
+      emitToUser({
+        type: 'user-confirmed-my-request',
+        data: friendRequest,
+        userId,
+      })
+    })
     socket.on('disconnect', () => {
       logger.info(`Socket disconnected [${socket.id}]`)
     })
@@ -62,8 +81,8 @@ function emitTo({
   data: any
   label: string | null
 }) {
-  if (label) gIo.to('watching:' + label).emit('basicEmit', type, data)
-  else gIo.emit('basicEmit', type, data)
+  if (label) gIo.to('watching:' + label).emit(type, data)
+  else gIo.emit(type, data)
 }
 
 async function emitToUser({
@@ -81,7 +100,7 @@ async function emitToUser({
     logger.info(
       `Emiting event: ${type} to user: ${userId} socket [id: ${socket.id}]`
     )
-    socket.emit('basicEmit', type, data)
+    socket.emit(type, data)
   } else {
     logger.info(`No active socket for user: ${userId}`)
     // _printSockets()

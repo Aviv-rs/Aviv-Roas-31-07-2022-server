@@ -1,3 +1,4 @@
+import { User } from 'api/user/models'
 import { Request, Response } from 'express'
 
 const authService = require('./auth.service')
@@ -35,7 +36,7 @@ async function signup(req: Request, res: Response) {
       avatar
     )
     logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
-    const user = await authService.login(username, password)
+    const user: User = await authService.login(username, password)
     const loginToken = authService.getLoginToken(user)
     logger.info('User login: ', user)
     res.cookie('loginToken', loginToken)
