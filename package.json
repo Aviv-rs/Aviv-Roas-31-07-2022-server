@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.ts",
     "start": "node server.ts",
-    "postinstall": "webpack -p"
+    "postinstall": "webpack"
   },
   "keywords": [],
   "author": "",
