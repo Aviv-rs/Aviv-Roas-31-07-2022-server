@@ -1,5 +1,3 @@
-import { Response } from 'express'
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -41,7 +39,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/friend', friendRouts)
 
-app.get('/**', (req: Request, res: Response) => {
+app.get('/**', (req: Request, res: any) => {
   res.status(404).sendFile(path.resolve(__dirname, 'public/404.html'))
 })
 
